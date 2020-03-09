@@ -1,4 +1,4 @@
-package UI;
+package ui;
 
 import objects.ListElement;
 import objects.Moon;
@@ -10,7 +10,6 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RunWindow extends JFrame {
     private JPanel MainScreen;
@@ -52,7 +51,7 @@ public class RunWindow extends JFrame {
     private ViewOptions filterView = ViewOptions.All;
     private SortOptions sort = SortOptions.Visit;
 
-    private int totalMoons;
+    private final int totalMoons;
 
     RunWindow(long seed, List<ListElement> setGeneratedList, JFrame parentWindow) {
         super("Darker Side Randomizer");
@@ -226,10 +225,10 @@ public class RunWindow extends JFrame {
 
         ListModel temp = new ListModel(
                 generatedList.stream()
-                .filter(searchFilter)
-                .filter(kingdomFilter)
-                .filter(collectedFilter)
-                .collect(Collectors.toList()));
+                        .filter(searchFilter)
+                        .filter(kingdomFilter)
+                        .filter(collectedFilter)
+                        .collect(Collectors.toList()));
         if (filterKingdom.equals("Full List")) {
             Comparator<ListElement> sortComparator;
             switch (sort) {
@@ -268,11 +267,11 @@ public class RunWindow extends JFrame {
                 if (!(c instanceof JList)) {
                     return;
                 }
-                JList list = (JList) c;
+                JList<ListElement> list = (JList<ListElement>) c;
                 if (e.getClickCount() == 2 || SwingUtilities.isRightMouseButton(e)) {
                     int index = list.locationToIndex(e.getPoint());
                     if (index >= 0) {
-                        ((ListElement) list.getModel().getElementAt(index)).toggleCrossedOff();
+                        (list.getModel().getElementAt(index)).toggleCrossedOff();
                         listViewPane.updateUI();
                     }
                 }
@@ -284,19 +283,11 @@ public class RunWindow extends JFrame {
         return MainScreen;
     }
 
-    private class ListModel extends AbstractListModel<ListElement> {
-        List<ListElement> list;
+    private static class ListModel extends AbstractListModel<ListElement> {
+        final List<ListElement> list;
 
         ListModel(List<ListElement> setList) {
             list = new ArrayList<>(setList);
-        }
-
-        ListModel(ListModel setList) {
-            list = setList.getList();
-        }
-
-        private List<ListElement> getList() {
-            return list;
         }
 
         @Override
@@ -312,15 +303,6 @@ public class RunWindow extends JFrame {
         void sort(Comparator<ListElement> comparator) {
             list.sort(comparator);
             fireContentsChanged(this, 0, list.size());
-        }
-
-        void removeIf(Predicate<ListElement> condition) {
-            list.removeIf(condition);
-            fireIntervalRemoved(this, 0, 0);
-        }
-
-        Stream<ListElement> stream () {
-            return list.stream();
         }
     }
 }

@@ -3,9 +3,9 @@ package objects;
 import java.util.Objects;
 
 public class Moon extends ListElement {
-    private String name;
-    private String king;
-    private String[] achTags;
+    private final String name;
+    private final String king;
+    private final String[] achTags;
     private int achLevel;
     private boolean firstVisit;
     private boolean crossedOff = false;
@@ -77,8 +77,10 @@ public class Moon extends ListElement {
     public boolean checkTags(String target) {
         boolean tagged = false;
         for (String s: achTags){
-            if(s.equals(target))
+            if (s.equals(target)) {
                 tagged = true;
+                break;
+            }
         }
         return tagged;
     }

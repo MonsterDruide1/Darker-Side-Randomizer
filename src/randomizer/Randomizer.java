@@ -10,20 +10,20 @@ import java.util.regex.Pattern;
 
 public class Randomizer {
 
-    private int moonsToPull = 0;
-    private int[] achievementProgress = new int[Lists.ACHIEVEMENT_TAGS.length + 1];
-    private boolean[] moonRockMoonPulled = new boolean[15];
-    private int[] kingdomFirstVisitMoons = new int[16];
+    private final int moonsToPull;
+    private final int[] achievementProgress = new int[Lists.ACHIEVEMENT_TAGS.length + 1];
+    private final boolean[] moonRockMoonPulled = new boolean[15];
+    private final int[] kingdomFirstVisitMoons = new int[16];
     private int moonsPulled = 0;
-    private List<ListElement> standby = new ArrayList<>();
+    private final List<ListElement> standby = new ArrayList<>();
 
-    private boolean toadetteAchievements;
-    private boolean rollingInCoins;
-    private boolean purpleCoins;
-    private boolean jumpRope;
-    private boolean volleyball;
-    private long seed;
-    private int moonCount;
+    private final boolean toadetteAchievements;
+    private final boolean rollingInCoins;
+    private final boolean purpleCoins;
+    private final boolean jumpRope;
+    private final boolean volleyball;
+    private final long seed;
+    private final int moonCount;
 
     public Randomizer(boolean toadetteAchievements, boolean rollingInCoins, boolean purpleCoins,
                       boolean jumpRope, boolean volleyball, long seed, int moonCount){
@@ -48,145 +48,7 @@ public class Randomizer {
         */
 
         Random rnd = new Random(seed);
-        List<ListElement> sourcePool = generateCompleteList();
-
-        /*
-         * remove all disabled, prerequisite, and postrequisite moons from sourcePool.
-         */
-        for(int i = 0; i<sourcePool.size(); i++) {
-            boolean remove = false;
-            boolean toStandby = false;
-
-            String name = sourcePool.get(i).getName();
-            if (!toadetteAchievements && sourcePool.get(i).getKingdom().equals("Achievements")) {
-                remove=true;
-            } else if(!rollingInCoins && name.equals("Rolling in Coins")){
-                remove=true;
-            } else if(!purpleCoins && (name.equals("Regional Coin Shopper") || name.startsWith("Souvenir"))) {
-                remove=true;
-            }
-            if (name.startsWith("Jump-Rope")) {
-                if(!jumpRope) {
-                    remove=true;
-                }
-                else {
-                    toStandby=true;
-                }
-            }
-            else if (name.startsWith("Beach")) {
-                if (!volleyball) {
-                    remove=true;
-                }
-                else {
-                    toStandby=true;
-                }
-            }
-            else if(sourcePool.get(i).checkTags("Tourist") ||
-                    sourcePool.get(i).checkTags("Yoshi") ||
-                    (sourcePool.get(i).checkTags("kfr") && !sourcePool.get(i).getKingdom().equals("Achievements"))){
-                toStandby=true;
-            }
-            else if(sourcePool.get(i).checkTags("Trace")) {
-                toStandby=true;
-            }
-            else if(name.equals("Peach in the Moon Kingdom") ||
-                    name.equals("Princess Peach, Home Again!") ||
-                    sourcePool.get(i).getKingdom().equals("Dark Side") ||
-                    sourcePool.get(i).getName().matches("Found with Dark Side Art.*")){
-                toStandby=true;
-            }
-            else if(name.equals("Atop the Highest Tower") || name.equals("Moon Shards in the Sand")){
-                toStandby=true;
-            }
-            else if(name.equals("Hat-and-Seek: Mushroom Kingdom")){
-                toStandby=true;
-            }
-            else if(name.startsWith("RC Car")){
-                toStandby=true;
-            }
-            else if(name.matches("Iceburn Circuit.*")){
-                toStandby=true;
-            }
-
-            if(remove){
-                sourcePool.remove(i);
-                i--;
-            }
-            else if(toStandby){
-                standby.add(sourcePool.remove(i));
-                i--;
-            }
-        }
-
-        /*
-         * add (possibly duplicated) prerequisite moons back into sourcePool.
-         */
-        for(int i = 0; i<standby.size(); i++){
-            String name = standby.get(i).getName();
-            if(Pattern.matches(".*Regular Cup", name)){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Walking on the Moon!") || name.equals("Walking the Desert!")
-                    || name.equals("Walking on Ice!")) {
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("A Tourist in the Metro Kingdom!")){
-                ListElement m = standby.remove(i);
-                for(int j = 0; j<6; j++)
-                    sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Atop the Highest Tower")) {
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("RC Car Pro!")){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Jump-Rope Hero")){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Iceburn Circuit Class A")){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Beach Volleyball: Champ")){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Gobbling Fruit with Yoshi")){
-                ListElement m = standby.remove(i);
-                for(int j = 0; j < 3; j++)
-                    sourcePool.add(m);
-                i--;
-            }
-            else if(standby.get(i).getKingdom().equals("Dark Side")){
-                ListElement m = standby.get(i);
-                if(m.getName().equals("Arrival at Rabbit Ridge!") || m.getName().equals("Captain Toad on the Dark Side!")) {
-                    sourcePool.add(m);
-                    standby.remove(i);
-                    i--;
-                }
-            }
-        }
+        List<ListElement> sourcePool = setupSourcePool();
 
         List<ListElement> output = new ArrayList<>();
         List<Moon> remainingAchievements = new ArrayList<>();
@@ -259,6 +121,145 @@ public class Randomizer {
             }
         }
         return allMoons;
+    }
+
+    private List<ListElement> setupSourcePool(){
+        List<ListElement> sourcePool = generateCompleteList();
+
+        // remove all disabled, prerequisite, and postrequisite moons from sourcePool.
+        for(int i = 0; i<sourcePool.size(); i++) {
+            boolean remove = false;
+            boolean toStandby = false;
+
+            String name = sourcePool.get(i).getName();
+            if (!toadetteAchievements && sourcePool.get(i).getKingdom().equals("Achievements")) {
+                remove=true;
+            } else if(!rollingInCoins && name.equals("Rolling in Coins")){
+                remove=true;
+            } else if(!purpleCoins && (name.equals("Regional Coin Shopper") || name.startsWith("Souvenir"))) {
+                remove=true;
+            }
+            if (name.startsWith("Jump-Rope")) {
+                if(!jumpRope) {
+                    remove=true;
+                }
+                else {
+                    toStandby=true;
+                }
+            }
+            else if (name.startsWith("Beach")) {
+                if (!volleyball) {
+                    remove=true;
+                }
+                else {
+                    toStandby=true;
+                }
+            }
+            else if(sourcePool.get(i).checkTags("Tourist") ||
+                    sourcePool.get(i).checkTags("Yoshi") ||
+                    (sourcePool.get(i).checkTags("kfr") && !sourcePool.get(i).getKingdom().equals("Achievements"))){
+                toStandby=true;
+            }
+            else if(sourcePool.get(i).checkTags("Trace")) {
+                toStandby=true;
+            }
+            else if(name.equals("Peach in the Moon Kingdom") ||
+                    name.equals("Princess Peach, Home Again!") ||
+                    sourcePool.get(i).getKingdom().equals("Dark Side") ||
+                    sourcePool.get(i).getName().matches("Found with Dark Side Art.*")){
+                toStandby=true;
+            }
+            else if(name.equals("Atop the Highest Tower") || name.equals("Moon Shards in the Sand")){
+                toStandby=true;
+            }
+            else if(name.equals("Hat-and-Seek: Mushroom Kingdom")){
+                toStandby=true;
+            }
+            else if(name.startsWith("RC Car")){
+                toStandby=true;
+            }
+            else if(name.matches("Iceburn Circuit.*")){
+                toStandby=true;
+            }
+
+            if(remove){
+                sourcePool.remove(i);
+                i--;
+            }
+            else if(toStandby){
+                standby.add(sourcePool.remove(i));
+                i--;
+            }
+        }
+
+        // add (possibly duplicated) prerequisite moons back into sourcePool.
+        for(int i = 0; i<standby.size(); i++){
+            String name = standby.get(i).getName();
+            if(Pattern.matches(".*Regular Cup", name)){
+                ListElement m = standby.remove(i);
+                sourcePool.add(m);
+                sourcePool.add(m);
+                i--;
+            }
+            else if(name.equals("Walking on the Moon!") || name.equals("Walking the Desert!")
+                    || name.equals("Walking on Ice!")) {
+                ListElement m = standby.remove(i);
+                sourcePool.add(m);
+                sourcePool.add(m);
+                i--;
+            }
+            else if(name.equals("A Tourist in the Metro Kingdom!")){
+                ListElement m = standby.remove(i);
+                for(int j = 0; j<6; j++)
+                    sourcePool.add(m);
+                i--;
+            }
+            else if(name.equals("Atop the Highest Tower")) {
+                ListElement m = standby.remove(i);
+                sourcePool.add(m);
+                sourcePool.add(m);
+                i--;
+            }
+            else if(name.equals("RC Car Pro!")){
+                ListElement m = standby.remove(i);
+                sourcePool.add(m);
+                sourcePool.add(m);
+                i--;
+            }
+            else if(name.equals("Jump-Rope Hero")){
+                ListElement m = standby.remove(i);
+                sourcePool.add(m);
+                sourcePool.add(m);
+                i--;
+            }
+            else if(name.equals("Iceburn Circuit Class A")){
+                ListElement m = standby.remove(i);
+                sourcePool.add(m);
+                sourcePool.add(m);
+                i--;
+            }
+            else if(name.equals("Beach Volleyball: Champ")){
+                ListElement m = standby.remove(i);
+                sourcePool.add(m);
+                sourcePool.add(m);
+                i--;
+            }
+            else if(name.equals("Gobbling Fruit with Yoshi")){
+                ListElement m = standby.remove(i);
+                for(int j = 0; j < 3; j++)
+                    sourcePool.add(m);
+                i--;
+            }
+            else if(standby.get(i).getKingdom().equals("Dark Side")){
+                ListElement m = standby.get(i);
+                if(m.getName().equals("Arrival at Rabbit Ridge!") || m.getName().equals("Captain Toad on the Dark Side!")) {
+                    sourcePool.add(m);
+                    standby.remove(i);
+                    i--;
+                }
+            }
+        }
+        return sourcePool;
     }
 
     private static ArrayList<ListElement> generateTaggedList(String tag, List<ListElement> parentList){

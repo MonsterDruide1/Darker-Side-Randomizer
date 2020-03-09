@@ -3,9 +3,9 @@ package objects;
 import java.util.Objects;
 
 public abstract class ListElement {
-    private String name;
-    private String kingdom;
-    private boolean firstVisit;
+    private final String name;
+    private final String kingdom;
+    private final boolean firstVisit;
 
     public ListElement(String name, String kingdom, boolean firstVisit) {
         this.name = name;

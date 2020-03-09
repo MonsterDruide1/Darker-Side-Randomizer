@@ -1,7 +1,7 @@
 package objects;
 
 public class NecessaryAction extends ListElement {
-    private String action;
+    private final String action;
 
     public NecessaryAction(String act, String king, boolean fV){
         super(act, king, fV);
