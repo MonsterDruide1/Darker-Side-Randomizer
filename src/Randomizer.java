@@ -605,7 +605,7 @@ public class Randomizer {
                 }
                 Collections.shuffle(source, rnd);
             }
-            else if(m.getName().substring(0,5).equals("Yoshi")) {
+            else if(m.getName().startsWith("Yoshi")) {
                 for (int i = 0; i < standby.size(); i++) {
                     switch(m.getName()){
                         case "Yoshi Under Siege":
