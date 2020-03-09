@@ -987,7 +987,7 @@ public class Lists {
             {5}, //goomba
             {15, 45}, //gp
             {5}, //hat
-            {10, 22}, //kfr
+            {10, 22}, //kfr = koopaFreeRun
             {5, 10}, //mips
             {5}, //music
             {5, 20}, //notes
