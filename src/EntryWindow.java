@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -12,6 +14,7 @@ public class EntryWindow {
     private JTextField seedField;
     private JButton randomSeedButton;
     private JButton generateRunButton;
+    private JSpinner noOfMoons;
     private List<ListElement> generatedList;
 
     private EntryWindow(JFrame thisWindow) {
@@ -32,6 +35,9 @@ public class EntryWindow {
         seedField.setText(Long.toString(Math.abs(seedRandomizer.nextLong())));
         randomSeedButton.addActionListener(e -> seedField.setText(Long.toString(Math.abs(seedRandomizer.nextLong()))));
 
+        ((NumberFormatter)((JSpinner.NumberEditor)noOfMoons.getEditor()).getTextField().getFormatter()).setAllowsInvalid(false);
+        noOfMoons.setValue(500);
+
         generateRunButton.addActionListener(e -> {
             //TODO: Open RunWindow for the generated route
             long seed = 0;
@@ -42,13 +48,13 @@ public class EntryWindow {
                 }
                 // Note that the randomize method already behaves properly if toadette is off and other achievement
                 // options are on.
-                generatedList = (new Randomizer()).randomize(toadetteAchievementsCheckBox.isSelected(),
+                generatedList = new Randomizer(toadetteAchievementsCheckBox.isSelected(),
                         purpleCoinAchievementsCheckBox.isSelected(),
                         rollingInCoinsCheckBox.isSelected(),
                         jumpRopeMoonsCheckBox.isSelected(),
                         volleyballMoonsCheckBox.isSelected(),
                         seed,
-                        500);
+                        (Integer)noOfMoons.getValue()).randomize();
             } catch (NumberFormatException unused) {
                 JOptionPane.showMessageDialog(InitialScreen, "Seed must be a number between 0 and " +
                         Long.MAX_VALUE + ".", "Invalid Seed", JOptionPane.ERROR_MESSAGE);
