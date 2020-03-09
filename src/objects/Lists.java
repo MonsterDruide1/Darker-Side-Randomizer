@@ -1009,7 +1009,7 @@ public class Lists {
             {5, 10} //Toad
     };
 
-    public static final String[][] kingdomFirstVisitReq = {
+    public static final String[][] kingdomFirstVisitRequiredMoons = {
             {"Cap", "0"},
             {"Cascade", "5"},
             {"Sand", "16"},
