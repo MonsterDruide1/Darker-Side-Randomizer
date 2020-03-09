@@ -446,7 +446,9 @@ public class Randomizer {
             moonsPulledAdditionally+=2;
         if(moonCount <= 0)
             return moonsPulledAdditionally;
-        else if(m.checkTags("Tourist")){
+
+        //<editor-fold desc="replacing action">
+        if(m.checkTags("Tourist")){
             for (int i = 0; i < standby.size(); i++) {
                 if(standby.get(i).checkTags("Tourist") && Integer.parseInt(m.getTags()[1]) == Integer.parseInt(standby.get(i).getTags()[1])-1){
                     ListElement nextTourist = standby.remove(i);
@@ -665,23 +667,22 @@ public class Randomizer {
                 }
             }
         }
+        //</editor-fold>
 
         if((toadetteAchievements || m.checkTags("Peach")) && m.getTags().length > 0){
             for(String tag : m.getTags()){
-                for(int i = 0; i < Lists.ACHIEVEMENT_TAGS.length; i++){
-                    if(tag.equals(Lists.ACHIEVEMENT_TAGS[i])){
-                        achievementProgress[i]++;
-                        //Lists.ACHIEVEMENT_LEVELS[i] contains the levels for tag[i]
-                        for(int j: Lists.ACHIEVEMENT_LEVELS[i]){
-                            if(achievementProgress[i] == j){
-                                for (int k = 0; k < remainingAchievements.size(); k++) {
-                                    ListElement toTest = remainingAchievements.get(k);
-                                    if(toTest.getTags()[0].equals(tag) && Integer.parseInt(toTest.getTags()[1]) == j){
-                                        output.add(remainingAchievements.remove(k));
-                                        moonsPulled++;
-                                        break;
-                                    }
-                                }
+                int i = Lists.indexOfAchievementTAG(tag);
+
+                achievementProgress[i]++;
+                //Lists.ACHIEVEMENT_LEVELS[i] contains the levels for tag[i]
+                for(int j : Lists.ACHIEVEMENT_LEVELS[i]){
+                    if(achievementProgress[i] == j){
+                        for (int k = 0; k < remainingAchievements.size(); k++) {
+                            ListElement toTest = remainingAchievements.get(k);
+                            if(toTest.getTags()[0].equals(tag) && Integer.parseInt(toTest.getTags()[1]) == j){
+                                output.add(remainingAchievements.remove(k));
+                                moonsPulled++;
+                                break;
                             }
                         }
                     }

@@ -842,7 +842,7 @@ public class Lists {
             {"Found with Dark Side Art 10", "Ruined", "false", "Art", "gp"},//</editor-fold>
     };
 
-    public static int indexOfElement(ListElement moon) {
+    public static int indexOfMoon(ListElement moon) {
         for (int i = 0; i < Lists.moons.length; i++) {
             if(Lists.moons[i][0].equals(moon.getName()))
                 return i;
@@ -853,7 +853,7 @@ public class Lists {
     /**
      * When the moon list is updated to handle first visit / revisit / post game / moon rock this will be unnecessary
      */
-    public static final String[] PG_NOT_MOON_ROCK = { //<editor-fold desc="List of available postgame moons which are not moon rocks">
+    public static final String[] PG_NOT_MOON_ROCK = { //<editor-fold desc="List of available postgame moons which are not part of moon rocks">
             "Frog-Jumping Above the Fog",
             "Frog-Jumping From the Top Deck",
             "Cap Kingdom Timer Challenge 1",
@@ -976,6 +976,14 @@ public class Lists {
     public static final String[] ACHIEVEMENT_TAGS = {"8-bit", "Art", "Bird", "Cappy", "Chest",
             "Fishing", "Goomba", "gp", "Hat", "kfr", "Mips", "Music", "Notes", "Outfit",
             "Peach", "Seed", "Sheep", "Slots", "Sphynx", "Timer", "Toad"};
+
+    public static int indexOfAchievementTAG(String tag) {
+        for (int i = 0; i < Lists.ACHIEVEMENT_TAGS.length; i++) {
+            if(Lists.ACHIEVEMENT_TAGS[i].equals(tag))
+                return i;
+        }
+        return -1;
+    }
 
     public static final int[][] ACHIEVEMENT_LEVELS = {
             {10, 25}, //8-bit

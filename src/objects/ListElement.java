@@ -50,7 +50,7 @@ public abstract class ListElement {
             return -1;
         if (visitM1 > visitM2)
             return 1;
-        return Lists.indexOfElement(m1) < Lists.indexOfElement(m2) ? -1 : 1;
+        return Lists.indexOfMoon(m1) < Lists.indexOfMoon(m2) ? -1 : 1;
     }
 
     private static int getVisit(ListElement m){
@@ -139,7 +139,7 @@ public abstract class ListElement {
             return -1;
         if (kingdom1 > kingdom2)
             return 1;
-        return Lists.indexOfElement(m1) < Lists.indexOfElement(m2) ? -1 : 1;
+        return Lists.indexOfMoon(m1) < Lists.indexOfMoon(m2) ? -1 : 1;
     }
 
     static int getKingdom(ListElement m){
