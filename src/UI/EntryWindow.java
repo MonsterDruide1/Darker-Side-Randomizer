@@ -1,6 +1,10 @@
+package UI;
+
+import objects.ListElement;
+import randomizer.Randomizer;
+
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.Random;
 

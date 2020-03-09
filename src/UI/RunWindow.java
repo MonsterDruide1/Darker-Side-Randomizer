@@ -1,3 +1,8 @@
+package UI;
+
+import objects.ListElement;
+import objects.Moon;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

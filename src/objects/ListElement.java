@@ -1,11 +1,13 @@
+package objects;
+
 import java.util.Objects;
 
-abstract class ListElement {
+public abstract class ListElement {
     private String name;
     private String kingdom;
     private boolean firstVisit;
 
-    ListElement(String name, String kingdom, boolean firstVisit) {
+    public ListElement(String name, String kingdom, boolean firstVisit) {
         this.name = name;
         this.kingdom = kingdom;
         this.firstVisit = firstVisit;
@@ -13,35 +15,35 @@ abstract class ListElement {
 
     private boolean crossedOff;
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    String getKingdom() {
+    public String getKingdom() {
         return kingdom;
     }
 
-    boolean getFirstVisit() {
+    public boolean getFirstVisit() {
         return firstVisit;
     }
 
-    String[] getTags() {
+    public String[] getTags() {
         return new String[]{};
     }
 
-    boolean checkTags(String tag) {
+    public boolean checkTags(String tag) {
         return false;
     }
 
-    void toggleCrossedOff() {
+    public void toggleCrossedOff() {
         crossedOff = !crossedOff;
     }
 
-    boolean getCrossedOff() {
+    public boolean getCrossedOff() {
         return crossedOff;
     }
 
-    static int compareByVisit(ListElement m1, ListElement m2) {
+    public static int compareByVisit(ListElement m1, ListElement m2) {
         int visitM1 = getVisit(m1);
         int visitM2 = getVisit(m2);
         if (visitM1 < visitM2)
@@ -130,7 +132,7 @@ abstract class ListElement {
         }
     }
 
-    static int compareByKingdom(ListElement m1, ListElement m2) {
+    public static int compareByKingdom(ListElement m1, ListElement m2) {
         int kingdom1 = getKingdom(m1);
         int kingdom2 = getKingdom(m2);
         if (kingdom1 < kingdom2)

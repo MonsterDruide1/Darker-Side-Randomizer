@@ -1,3 +1,5 @@
+package objects;
+
 import java.util.Objects;
 
 public class Moon extends ListElement {
@@ -8,7 +10,7 @@ public class Moon extends ListElement {
     private boolean firstVisit;
     private boolean crossedOff = false;
 
-    Moon(String moonName, String kingdom, boolean first, String... tagArray) {
+    public Moon(String moonName, String kingdom, boolean first, String... tagArray) {
         super(moonName, kingdom, first);
         name = moonName;
         king = kingdom;
@@ -16,7 +18,7 @@ public class Moon extends ListElement {
         firstVisit = first;
     }
 
-    Moon(String achievementName, String kingdom, int level, String... tagArray) {
+    public Moon(String achievementName, String kingdom, int level, String... tagArray) {
         super(achievementName, kingdom, true);
         name = achievementName;
         king = kingdom;
@@ -54,25 +56,25 @@ public class Moon extends ListElement {
         return firstVisit;
     }
 
-    int getLevel() {
+    public int getLevel() {
         return achLevel;
     }
 
-    void toggleCrossedOff() {
+    public void toggleCrossedOff() {
         crossedOff = !crossedOff;
     }
 
-    boolean getCrossedOff() {
+    public boolean getCrossedOff() {
         return crossedOff;
     }
 
     @Override
-    String[] getTags(){
+    public String[] getTags(){
         return achTags;
     }
 
     @Override
-    boolean checkTags(String target) {
+    public boolean checkTags(String target) {
         boolean tagged = false;
         for (String s: achTags){
             if(s.equals(target))

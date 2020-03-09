@@ -1,3 +1,10 @@
+package randomizer;
+
+import objects.ListElement;
+import objects.Lists;
+import objects.Moon;
+import objects.NecessaryAction;
+
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -30,7 +37,7 @@ public class Randomizer {
         moonsToPull = moonCount;
     }
 
-    List<ListElement> randomize() {
+    public List<ListElement> randomize() {
         //TODO: FMS option?
         //TODO: Peace option?
 
@@ -279,7 +286,7 @@ public class Randomizer {
     private static ArrayList<Moon> removeAchievementsFromList(List<ListElement> sourceList){
         ArrayList<Moon> achievements = new ArrayList<>();
 
-        for(int i = 0; i < sourceList.size(); i++){
+        for(int i = 0; i <sourceList.size(); i++){
             if(sourceList.get(i).getKingdom().equals("Achievements")){
                 achievements.add((Moon)sourceList.remove(i));
                 i--;
@@ -290,7 +297,7 @@ public class Randomizer {
 
     private void pullTaggedMoons(Moon achievement, List<ListElement> source, List<ListElement> output, Random rnd, int noOfMoons, List<Moon> remainingAchievements){
         int tagValue = -1;
-        for(int i = 0; i<Lists.ACHIEVEMENT_TAGS.length; i++)
+        for(int i = 0; i < Lists.ACHIEVEMENT_TAGS.length; i++)
             if(achievement.getTags()[0].equals(Lists.ACHIEVEMENT_TAGS[i]))
                 tagValue = i;
         if(tagValue == -1)
@@ -306,7 +313,7 @@ public class Randomizer {
 
     private void pullFirstVisitMoons(String kingdom, List<ListElement> source, List<ListElement> output, Random rnd, int noOfMoons, List<Moon> remainingAchievements){
         int kingdomValue;
-        for (kingdomValue = 0; kingdomValue<Lists.kingdomFirstVisitReq.length; kingdomValue++){
+        for (kingdomValue = 0; kingdomValue < Lists.kingdomFirstVisitReq.length; kingdomValue++){
             if(Lists.kingdomFirstVisitReq[kingdomValue][0].equals(kingdom)){
                 break;
             }
@@ -390,7 +397,7 @@ public class Randomizer {
      *
      * NecessaryAction handler for hint art.
      */
-    private void pullMoon(List<ListElement> source, List<ListElement> output, Random rnd,int noOfMoons,List<Moon> remainingAchievements){
+    private void pullMoon(List<ListElement> source, List<ListElement> output, Random rnd, int noOfMoons, List<Moon> remainingAchievements){
         ListElement m = source.remove(0);
         if(m.checkTags("Multi") && moonsPulled > moonsToPull - 3)
             return;

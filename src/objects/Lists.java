@@ -1,4 +1,6 @@
-class Lists {
+package objects;
+
+public class Lists {
     // "Cappy" = moons like Pops Out of the Tail
     // "Hat" = Hat-and-Seek moons
     // "Tourist" = not an Achievements, just for randomization
@@ -6,7 +8,7 @@ class Lists {
     // "Ach" = Achievements moon
     // "Story" = not an Achievements, just to force inclusion
     // "Multi" = not an Achievements, just for moon counting
-    static final String[][] moons = {
+    public static final String[][] moons = { //<editor-fold desc="Moon list">
             {"Frog-Jumping Above the Fog", "Cap", "false"},
             {"Frog-Jumping From the Top Deck", "Cap", "false"},
             {"Cap Kingdom Timer Challenge 1", "Cap", "false", "Timer"},
@@ -837,10 +839,10 @@ class Lists {
             {"Found with Dark Side Art 7", "Lost", "false", "Art", "gp"},
             {"Found with Dark Side Art 8", "Luncheon", "false", "Art", "gp"},
             {"Found with Dark Side Art 9", "Lake", "false", "Art", "gp"},
-            {"Found with Dark Side Art 10", "Ruined", "false", "Art", "gp"},
+            {"Found with Dark Side Art 10", "Ruined", "false", "Art", "gp"},//</editor-fold>
     };
 
-    static int indexOfElement(ListElement moon) {
+    public static int indexOfElement(ListElement moon) {
         for (int i = 0; i < Lists.moons.length; i++) {
             if(Lists.moons[i][0].equals(moon.getName()))
                 return i;
@@ -851,7 +853,8 @@ class Lists {
     /**
      * When the moon list is updated to handle first visit / revisit / post game / moon rock this will be unnecessary
      */
-    static final String[] PG_NOT_MOON_ROCK = {"Frog-Jumping Above the Fog",
+    public static final String[] PG_NOT_MOON_ROCK = { //<editor-fold desc="List of available postgame moons which are not moon rocks">
+            "Frog-Jumping Above the Fog",
             "Frog-Jumping From the Top Deck",
             "Cap Kingdom Timer Challenge 1",
             "Good Evening, Captain Toad",
@@ -967,14 +970,15 @@ class Lists {
             "Sphynx's Hidden Vault",
             "A Tourist in the Moon Kingdom!",
             "Peach in the Moon Kingdom",
-            "Found with Moon Kingdom Art"
+            "Found with Moon Kingdom Art" //</editor-fold>
     };
 
-    static final String[] ACHIEVEMENT_TAGS = {"8-bit", "Art", "Bird", "Cappy", "Chest",
+    public static final String[] ACHIEVEMENT_TAGS = {"8-bit", "Art", "Bird", "Cappy", "Chest",
             "Fishing", "Goomba", "gp", "Hat", "kfr", "Mips", "Music", "Notes", "Outfit",
             "Peach", "Seed", "Sheep", "Slots", "Sphynx", "Timer", "Toad"};
 
-    static final int[][] ACHIEVEMENT_LEVELS = {{10, 25}, //8-bit
+    public static final int[][] ACHIEVEMENT_LEVELS = {
+            {10, 25}, //8-bit
             {5, 15}, //art
             {5}, //bird
             {3, 10}, //cappy
@@ -997,7 +1001,7 @@ class Lists {
             {5, 10} //Toad
     };
 
-    static final String[][] kingdomFirstVisitReq = {
+    public static final String[][] kingdomFirstVisitReq = {
             {"Cap", "0"},
             {"Cascade", "5"},
             {"Sand", "16"},

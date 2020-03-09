@@ -1,7 +1,9 @@
+package objects;
+
 public class NecessaryAction extends ListElement {
     private String action;
 
-    NecessaryAction(String act, String king, boolean fV){
+    public NecessaryAction(String act, String king, boolean fV){
         super(act, king, fV);
         action = act;
     }
