@@ -133,8 +133,8 @@ public abstract class ListElement {
     }
 
     public static int compareByKingdom(ListElement m1, ListElement m2) {
-        int kingdom1 = getKingdom(m1);
-        int kingdom2 = getKingdom(m2);
+        int kingdom1 = m1.getKingdomNo();
+        int kingdom2 = m2.getKingdomNo();
         if (kingdom1 < kingdom2)
             return -1;
         if (kingdom1 > kingdom2)
@@ -142,8 +142,8 @@ public abstract class ListElement {
         return Lists.indexOfMoon(m1) < Lists.indexOfMoon(m2) ? -1 : 1;
     }
 
-    static int getKingdom(ListElement m){
-        switch (m.getKingdom()) {
+    public int getKingdomNo(){
+        switch (getKingdom()) {
             case "Cap":
                 return 0;
             case "Cascade":

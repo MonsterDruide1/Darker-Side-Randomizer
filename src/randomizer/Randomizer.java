@@ -103,14 +103,7 @@ public class Randomizer {
             else {
                 boolean firstVisit = moon[2].equals("true");
 
-                String[] tags = {};
-                if (moon.length == 4) {
-                    tags = new String[]{moon[3]};
-                } else if (moon.length == 5) {
-                    tags = new String[]{moon[3], moon[4]};
-                } else if (moon.length == 6) {
-                    tags = new String[]{moon[3], moon[4], moon[5]};
-                }
+                String[] tags = moon.length>3 ? Arrays.copyOfRange(moon, 3, moon.length) : new String[]{};
                 allMoons.add(new Moon(name, kingdom, firstVisit, tags));
             }
         }
@@ -665,17 +658,19 @@ public class Randomizer {
 
         if((toadetteAchievements || m.checkTags("Peach")) && m.getTags().length > 0){
             for(String tag : m.getTags()){
-                int i = Lists.indexOfAchievementTAG(tag);
+                int indexOfTag = Lists.indexOfAchievementTag(tag);
 
-                achievementProgress[i]++;
+                if(indexOfTag == -1) continue; //Tag not found, just continue with the next tag
+
+                achievementProgress[indexOfTag]++;
                 //Lists.ACHIEVEMENT_LEVELS[i] contains the levels for tag[i]
-                for(int j : Lists.ACHIEVEMENT_LEVELS[i]){
-                    if(achievementProgress[i] == j){
-                        for (int k = 0; k < remainingAchievements.size(); k++) {
-                            ListElement toTest = remainingAchievements.get(k);
-                            if(toTest.getTags()[0].equals(tag) && Integer.parseInt(toTest.getTags()[1]) == j){
-                                output.add(remainingAchievements.remove(k));
-                                moonsPulled++;
+
+                for(int i=0;i<remainingAchievements.size();i++) {
+                    if (remainingAchievements.get(i).checkTags(tag)) {
+                        for(int neededForLevel : Lists.ACHIEVEMENT_LEVELS[indexOfTag]) {
+                            if (achievementProgress[indexOfTag] == neededForLevel) {
+                                output.add(remainingAchievements.remove(i));
+                                moonsPulledAdditionally++;
                                 break;
                             }
                         }
@@ -812,61 +807,17 @@ public class Randomizer {
         }
         if(!moonRockMoonPulled[14] && !toTest.getFirstVisit()){
             boolean moonRock = true;
-            for (String moon: Lists.PG_NOT_MOON_ROCK) {
+            for (String moon : Lists.PG_NOT_MOON_ROCK) {
                 if (toTest.getName().equals(moon)){
                     moonRock = false;
                     break;
                 }
             }
             if(moonRock){
-                switch(toTest.getKingdom()){
-                    case "Cap":
-                        moonRockMoonPulled[0] = true;
-                        break;
-                    case "Cascade":
-                        moonRockMoonPulled[1] = true;
-                        break;
-                    case "Sand":
-                        moonRockMoonPulled[2] = true;
-                        break;
-                    case "Lake":
-                        moonRockMoonPulled[3] = true;
-                        break;
-                    case "Wooded":
-                        moonRockMoonPulled[4] = true;
-                        break;
-                    case "Cloud":
-                        moonRockMoonPulled[5] = true;
-                        break;
-                    case "Lost":
-                        moonRockMoonPulled[6] = true;
-                        break;
-                    case "Metro":
-                        moonRockMoonPulled[7] = true;
-                        break;
-                    case "Snow":
-                        moonRockMoonPulled[8] = true;
-                        break;
-                    case "Seaside":
-                        moonRockMoonPulled[9] = true;
-                        break;
-                    case "Luncheon":
-                        moonRockMoonPulled[10] = true;
-                        break;
-                    case "Ruined":
-                        moonRockMoonPulled[11] = true;
-                        break;
-                    case "Bowser's":
-                        moonRockMoonPulled[12] = true;
-                        break;
-                    case "Moon":
-                        moonRockMoonPulled[13] = true;
-                        break;
-                    default: break;
-                }
+                moonRockMoonPulled[toTest.getKingdomNo()] = true;
             }
             boolean addMRLib = true;
-            for (boolean b: moonRockMoonPulled) {
+            for (boolean b : moonRockMoonPulled) {
                 if(!b){
                     addMRLib = false;
                     break;

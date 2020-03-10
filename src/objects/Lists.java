@@ -977,7 +977,7 @@ public class Lists {
             "Fishing", "Goomba", "gp", "Hat", "kfr", "Mips", "Music", "Notes", "Outfit",
             "Peach", "Seed", "Sheep", "Slots", "Sphynx", "Timer", "Toad"};
 
-    public static int indexOfAchievementTAG(String tag) {
+    public static int indexOfAchievementTag(String tag) {
         for (int i = 0; i < Lists.ACHIEVEMENT_TAGS.length; i++) {
             if(Lists.ACHIEVEMENT_TAGS[i].equals(tag))
                 return i;
