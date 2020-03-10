@@ -59,9 +59,9 @@ public class Randomizer {
 
         moonsPulled += pullStoryMoons(sourcePool, output, kingdomFirstVisitMoons);
 
-        for(String[] kingdom : Lists.kingdomFirstVisitRequiredMoons){
+        for(int i=0;i<Lists.kingdomFirstVisitRequiredMoons.length;i++){
             Collections.shuffle(sourcePool, rnd);
-            moonsPulled += pullFirstVisitMoons(kingdom[0], sourcePool, output, remainingAchievements, standby, moonRockMoonPulled, kingdomFirstVisitMoons, achievementProgress, moonsPulled);
+            moonsPulled += pullFirstVisitMoons(i, sourcePool, output, remainingAchievements, standby, moonRockMoonPulled, kingdomFirstVisitMoons, achievementProgress, moonsPulled);
         }
 
         while(moonsPulled < moonCount){
@@ -93,19 +93,7 @@ public class Randomizer {
     private static ArrayList<ListElement> generateCompleteList(){
         ArrayList<ListElement> allMoons = new ArrayList<>();
         for(String[] moon : Lists.moons){
-            String name = moon[0];
-            String kingdom = moon[1];
-            if(kingdom.equals("Achievements")) {
-                int level = Integer.parseInt(moon[2]);
-                String[] tags = {moon[3], moon[4]};
-                allMoons.add(new Moon(name, kingdom, level, tags));
-            }
-            else {
-                boolean firstVisit = moon[2].equals("true");
-
-                String[] tags = moon.length>3 ? Arrays.copyOfRange(moon, 3, moon.length) : new String[]{};
-                allMoons.add(new Moon(name, kingdom, firstVisit, tags));
-            }
+            allMoons.add(new Moon(moon));
         }
         return allMoons;
     }
@@ -120,11 +108,9 @@ public class Randomizer {
             boolean toStandby = false;
 
             String name = sourcePool.get(i).getName();
-            if (!toadetteAchievements && sourcePool.get(i).getKingdom().equals("Achievements")) {
-                remove=true;
-            } else if(!rollingInCoins && name.equals("Rolling in Coins")){
-                remove=true;
-            } else if(!purpleCoins && (name.equals("Regional Coin Shopper") || name.startsWith("Souvenir"))) {
+            if ((!toadetteAchievements && sourcePool.get(i).getKingdom().equals("Achievements")) ||
+                    (!rollingInCoins && name.equals("Rolling in Coins")) ||
+                    (!purpleCoins && (name.equals("Regional Coin Shopper")) || name.startsWith("Souvenir"))) {
                 remove=true;
             }
             if (name.startsWith("Jump-Rope")) {
@@ -145,28 +131,17 @@ public class Randomizer {
             }
             else if(sourcePool.get(i).checkTags("Tourist") ||
                     sourcePool.get(i).checkTags("Yoshi") ||
-                    (sourcePool.get(i).checkTags("kfr") && !sourcePool.get(i).getKingdom().equals("Achievements"))){
-                toStandby=true;
-            }
-            else if(sourcePool.get(i).checkTags("Trace")) {
-                toStandby=true;
-            }
-            else if(name.equals("Peach in the Moon Kingdom") ||
-                    name.equals("Princess Peach, Home Again!") ||
+                    sourcePool.get(i).checkTags("Trace") ||
+                    (sourcePool.get(i).checkTags("kfr") && !sourcePool.get(i).getKingdom().equals("Achievements")) ||
                     sourcePool.get(i).getKingdom().equals("Dark Side") ||
-                    sourcePool.get(i).getName().matches("Found with Dark Side Art.*")){
-                toStandby=true;
-            }
-            else if(name.equals("Atop the Highest Tower") || name.equals("Moon Shards in the Sand")){
-                toStandby=true;
-            }
-            else if(name.equals("Hat-and-Seek: Mushroom Kingdom")){
-                toStandby=true;
-            }
-            else if(name.startsWith("RC Car")){
-                toStandby=true;
-            }
-            else if(name.matches("Iceburn Circuit.*")){
+                    name.equals("Peach in the Moon Kingdom") ||
+                    name.equals("Princess Peach, Home Again!") ||
+                    name.matches("Found with Dark Side Art.*") ||
+                    name.equals("Atop the Highest Tower") ||
+                    name.equals("Moon Shards in the Sand") ||
+                    name.equals("Hat-and-Seek: Mushroom Kingdom") ||
+                    name.startsWith("RC Car") ||
+                    name.matches("Iceburn Circuit.*")){
                 toStandby=true;
             }
 
@@ -183,14 +158,15 @@ public class Randomizer {
         // add (possibly duplicated) prerequisite moons back into sourcePool.
         for(int i = 0; i<standby.size(); i++){
             String name = standby.get(i).getName();
-            if(Pattern.matches(".*Regular Cup", name)){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Walking on the Moon!") || name.equals("Walking the Desert!")
-                    || name.equals("Walking on Ice!")) {
+            if(Pattern.matches(".*Regular Cup", name) ||
+                    name.equals("Walking on the Moon!") ||
+                    name.equals("Walking the Desert!")||
+                    name.equals("Walking on Ice!") ||
+                    name.equals("Atop the Highest Tower") ||
+                    name.equals("RC Car Pro!") ||
+                    name.equals("Jump-Rope Hero") ||
+                    name.equals("Iceburn Circuit Class A") ||
+                    name.equals("Beach Volleyball: Champ")){
                 ListElement m = standby.remove(i);
                 sourcePool.add(m);
                 sourcePool.add(m);
@@ -200,36 +176,6 @@ public class Randomizer {
                 ListElement m = standby.remove(i);
                 for(int j = 0; j<6; j++)
                     sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Atop the Highest Tower")) {
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("RC Car Pro!")){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Jump-Rope Hero")){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Iceburn Circuit Class A")){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
-                i--;
-            }
-            else if(name.equals("Beach Volleyball: Champ")){
-                ListElement m = standby.remove(i);
-                sourcePool.add(m);
-                sourcePool.add(m);
                 i--;
             }
             else if(name.equals("Gobbling Fruit with Yoshi")){
@@ -253,7 +199,7 @@ public class Randomizer {
         return map;
     }
 
-    private static ArrayList<ListElement> generateTaggedList(String tag, List<ListElement> parentList){
+    private static ArrayList<ListElement> removeTaggedFromList(String tag, List<ListElement> parentList){
         ArrayList<ListElement> taggedMoons = new ArrayList<>();
         for (int i = 0; i<parentList.size(); i++) {
             if (parentList.get(i).checkTags(tag)){
@@ -289,34 +235,26 @@ public class Randomizer {
 
     private int pullTaggedMoons(Moon achievement, List<ListElement> source, List<ListElement> output, List<Moon> remainingAchievements, List<ListElement> standby, boolean[] moonRockMoonPulled, int[] kingdomFirstVisitMoons, int[] achievementProgress, int moonsPulled){
         int moonsPulledAdditionally = 0;
-        int tagValue = -1;
-        for(int i = 0; i < Lists.ACHIEVEMENT_TAGS.length; i++)
-            if(achievement.getTags()[0].equals(Lists.ACHIEVEMENT_TAGS[i]))
-                tagValue = i;
+        int tagValue = Lists.indexOfAchievementTag(achievement.getTags()[0]);
         if(tagValue == -1)
             return 0;
 
-        ArrayList<ListElement> taggedList = generateTaggedList(achievement.getTags()[0], source);
+        ArrayList<ListElement> taggedList = removeTaggedFromList(achievement.getTags()[0], source);
         Collections.shuffle(taggedList, rnd);
-        while(achievementProgress[tagValue]<Integer.parseInt(achievement.getTags()[1])){
+        int neededProgress = Integer.parseInt(achievement.getTags()[1]);
+        while(achievementProgress[tagValue]<neededProgress){
             moonsPulledAdditionally += pullMoon(taggedList, output, remainingAchievements, standby, moonRockMoonPulled, kingdomFirstVisitMoons, achievementProgress, moonsPulled);
         }
         source.addAll(taggedList);
         return moonsPulledAdditionally;
     }
 
-    private int pullFirstVisitMoons(String kingdom, List<ListElement> source, List<ListElement> output, List<Moon> remainingAchievements, List<ListElement> standby, boolean[] moonRockMoonPulled, int[] kingdomFirstVisitMoons, int[] achievementProgress, int moonsPulled){
+    private int pullFirstVisitMoons(int kingdomIndex, List<ListElement> source, List<ListElement> output, List<Moon> remainingAchievements, List<ListElement> standby, boolean[] moonRockMoonPulled, int[] kingdomFirstVisitMoons, int[] achievementProgress, int moonsPulled){
         int moonsPulledAdditionally = 0;
-        int kingdomValue;
-        for (kingdomValue = 0; kingdomValue < Lists.kingdomFirstVisitRequiredMoons.length; kingdomValue++){
-            if(Lists.kingdomFirstVisitRequiredMoons[kingdomValue][0].equals(kingdom)){
-                break;
-            }
-        }
 
-        ArrayList<ListElement> firstVisitList = generateFirstVisitList(kingdom, source);
+        ArrayList<ListElement> firstVisitList = generateFirstVisitList(Lists.kingdomFirstVisitRequiredMoons[kingdomIndex][0], source);
         Collections.shuffle(firstVisitList, rnd);
-        while(kingdomFirstVisitMoons[kingdomValue] < Integer.parseInt(Lists.kingdomFirstVisitRequiredMoons[kingdomValue][1])){
+        while(kingdomFirstVisitMoons[kingdomIndex] < Integer.parseInt(Lists.kingdomFirstVisitRequiredMoons[kingdomIndex][1])){
             moonsPulledAdditionally += pullMoon(firstVisitList, output, remainingAchievements, standby, moonRockMoonPulled, kingdomFirstVisitMoons, achievementProgress, moonsPulled);
         }
         source.addAll(firstVisitList);
@@ -399,7 +337,7 @@ public class Randomizer {
         int moonsPulledAdditionally = 0;
         ListElement m = source.remove(0);
         if(m.checkTags("Multi") && moonsPulled > moonCount - 3)
-            return 0;
+            return 0; // If pulled moon is a multi-moon and we only need less than 3 moons, cancel and let it pull a new moon
         if(toadetteAchievements) {
             if (willMeetAchievement(m, moonRockMoonPulled, achievementProgress) + moonsPulled + 1 > moonCount) {
                 return 0;
@@ -756,9 +694,9 @@ public class Randomizer {
         }
         Collections.shuffle(achievementSource, rnd);
         for(int i = 0; i<15; i++){
-            Moon m = achievementSource.remove(0);
-            returns.add(m);
-            if(m.getName().equals("Art Investigator")){
+            Moon moon = achievementSource.remove(0);
+            returns.add(moon);
+            if(moon.getName().equals("Art Investigator")){
                 for (int j = 0; j < sourcePool.size(); j++) {
                     if(sourcePool.get(j).getName().equals("Arrival at Rabbit Ridge!")){
                         sourcePool.add(0, sourcePool.remove(j));
@@ -767,8 +705,8 @@ public class Randomizer {
                 }
             }
             moonsPulledAdditionally++;
-            String tag = m.getTags()[0];
-            int level = m.getLevel();
+            String tag = moon.getTags()[0];
+            int level = moon.getLevel();
             for(int j = 0; j<remainingAchievements.size(); j++){
                 Moon test = remainingAchievements.get(j);
                 if(test.getLevel() == level+1 && test.getTags()[0].equals(tag)){

@@ -1,29 +1,44 @@
 package objects;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Moon extends ListElement {
     private final String name;
-    private final String king;
-    private final String[] achTags;
-    private int achLevel;
+    private final String kingdom;
+    private final String[] tags;
+    private int level;
     private boolean firstVisit;
     private boolean crossedOff = false;
+
+    public Moon(String[] moon){
+        super(moon[0],moon[1], moon[1].equals("Achievements") || moon[2].equals("true"));
+        name = moon[0];
+        kingdom = moon[1];
+        if(kingdom.equals("Achievements")) {
+            level = Integer.parseInt(moon[2]);
+            tags = new String[]{moon[3], moon[4]};
+        }
+        else {
+            firstVisit = moon[2].equals("true");
+            tags = moon.length>3 ? Arrays.copyOfRange(moon, 3, moon.length) : new String[]{};
+        }
+    }
 
     public Moon(String moonName, String kingdom, boolean first, String... tagArray) {
         super(moonName, kingdom, first);
         name = moonName;
-        king = kingdom;
-        achTags = tagArray;
+        this.kingdom = kingdom;
+        tags = tagArray;
         firstVisit = first;
     }
 
     public Moon(String achievementName, String kingdom, int level, String... tagArray) {
         super(achievementName, kingdom, true);
         name = achievementName;
-        king = kingdom;
-        achTags = tagArray;
-        achLevel = level;
+        this.kingdom = kingdom;
+        tags = tagArray;
+        this.level = level;
     }
 
     public String toString() {
@@ -34,8 +49,8 @@ public class Moon extends ListElement {
         */
         String out = name;
 
-        if (king.equals("Achievements")) {
-            out += ": " + achTags[1];
+        if (kingdom.equals("Achievements")) {
+            out += ": " + tags[1];
         }
 
         if (crossedOff) {
@@ -49,7 +64,7 @@ public class Moon extends ListElement {
     }
 
     public String getKingdom() {
-        return king;
+        return kingdom;
     }
 
     public boolean getFirstVisit() {
@@ -57,7 +72,7 @@ public class Moon extends ListElement {
     }
 
     public int getLevel() {
-        return achLevel;
+        return level;
     }
 
     public void toggleCrossedOff() {
@@ -70,13 +85,13 @@ public class Moon extends ListElement {
 
     @Override
     public String[] getTags(){
-        return achTags;
+        return tags;
     }
 
     @Override
     public boolean checkTags(String target) {
         boolean tagged = false;
-        for (String s: achTags){
+        for (String s: tags){
             if (s.equals(target)) {
                 tagged = true;
                 break;
